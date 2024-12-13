@@ -1,9 +1,7 @@
 name: Deployment using AWS Elastic Beanstalk with CI/CD
 
 on:
-  push:
-    branches:
-      - main
+  push
 
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
