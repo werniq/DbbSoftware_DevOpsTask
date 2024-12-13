@@ -54,7 +54,7 @@ jobs:
         run: zip -r deploy.zip Dockerrun.aws.json
 
       - name: Deploy to Elastic Beanstalk
-        uses: einaregilsson/elastic-beanstalk-deploy@v22
+        uses: einaregilsson/beanstalk-deploy@v22
         with:
           access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
