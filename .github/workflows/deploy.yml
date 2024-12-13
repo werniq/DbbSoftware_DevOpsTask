@@ -53,20 +53,13 @@ jobs:
       - name: Create deployment package
         run: zip -r deploy.zip Dockerrun.aws.json
 
-      - name: Deploy to Elastic Beanstalk
-        env:
-          AWS_REGION: ${{ env.AWS_REGION }}
-          APP_NAME: healthcheck-app
-          ENV_NAME: Healthcheck-app-env
-          IMAGE_TAG: latest
-          DOCKER_IMAGE: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository:latest
-        run: |
-          aws elasticbeanstalk create-application-version \
-            --application-name $APP_NAME \
-            --version-label $IMAGE_TAG \
-            --source-bundle S3Bucket=$ECR_REPOSITORY,S3Key=$IMAGE_TAG
-          
-          aws elasticbeanstalk update-environment \
-            --application-name $APP_NAME \
-            --environment-name $ENV_NAME \
-            --version-label $IMAGE_TAG
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: MyApplicationName
+          environment_name: MyApplication-Environment
+          version_label: 12345
+          region: us-west-2
+          deployment_package: deploy.zip
