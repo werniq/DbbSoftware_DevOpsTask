@@ -28,7 +28,7 @@ func main() {
 
 	app := awscdk.NewApp(nil)
 
-	NewAwsStack(app, "DBBSoftware_TestTask	AwsStack", &AwsStackProps{
+	NewAwsStack(app, "DBBSoftware_TestTaskAwsStack", &AwsStackProps{
 		awscdk.StackProps{
 			Env: env(),
 		},
