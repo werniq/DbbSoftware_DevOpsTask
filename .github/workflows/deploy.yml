@@ -58,6 +58,7 @@ jobs:
           AWS_REGION: ${{ env.AWS_REGION }}
           APP_NAME: healthcheck-app
           ENV_NAME: Healthcheck-app-env
+          IMAGE_TAG: latest
           DOCKER_IMAGE: ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.$AWS_REGION.amazonaws.com/${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository:latest
         run: |
           aws elasticbeanstalk create-application-version \
