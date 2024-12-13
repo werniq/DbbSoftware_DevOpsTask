@@ -4,8 +4,6 @@ import (
 	cdk "github.com/aws/aws-cdk-go/awscdk/v2"
 	ec2 "github.com/aws/aws-cdk-go/awscdk/v2/awsec2"
 	ecr "github.com/aws/aws-cdk-go/awscdk/v2/awsecr"
-	"os"
-
 	// "github.com/aws/aws-cdk-go/awscdk/v2/awssqs"
 	"github.com/aws/constructs-go/constructs/v10"
 	"github.com/aws/jsii-runtime-go"
@@ -51,7 +49,6 @@ func NewAwsStack(scope constructs.Construct, id string, props *AwsStackProps) cd
 	stack := cdk.NewStack(scope, &id, &sprops)
 
 	ecrRepo := ecr.NewRepository(stack, jsii.String("DBBSoftwareTestTaskECR"), &ecr.RepositoryProps{
-		EmptyOnDelete:   jsii.Bool(true),
 		ImageScanOnPush: jsii.Bool(true),
 		RepositoryName:  jsii.String(ecrRepositoryName),
 	})
@@ -108,7 +105,7 @@ func main() {
 
 	app := cdk.NewApp(nil)
 
-	NewAwsStack(app, "DBBSoftware_TestTaskAwsStack", &AwsStackProps{
+	NewAwsStack(app, "DBBSoftwareTestTaskAwsStack", &AwsStackProps{
 		cdk.StackProps{
 			Env: env(),
 		},
@@ -121,7 +118,7 @@ func main() {
 // be deployed. For more information see: https://docs.aws.amazon.com/cdk/latest/guide/environments.html
 func env() *cdk.Environment {
 	return &cdk.Environment{
-		Account: jsii.String(os.Getenv("CDK_DEFAULT_ACCOUNT")),
-		Region:  jsii.String(os.Getenv("CDK_DEFAULT_REGION")),
+		Account: jsii.String("954976321177"),
+		Region:  jsii.String("us-east-1"),
 	}
 }

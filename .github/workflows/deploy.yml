@@ -32,8 +32,8 @@ jobs:
 
       - name: Push Docker image to AWS ECR
         run: |
-          docker tag healthcheck-app:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/healthcheck-app:latest
-          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/healthcheck-app:latest
+          docker tag healthcheck-app:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository
 
       - name: Prepare Dockerrun.aws.json file
         run: |
