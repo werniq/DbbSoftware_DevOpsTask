@@ -10,6 +10,46 @@ env:
   AWS_REGION: us-east-1
 
 jobs:
+  create-environment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Create Elastic Beanstalk Application and Environment
+        run: |
+          APPLICATION=$(aws elasticbeanstalk describe-applications --application-names healthcheck-app --query 'Applications[*]' --output text)
+          if [ -z "$APPLICATION" ]; then
+            echo "Application does not exist. Creating application."
+            aws elasticbeanstalk create-application --application-name healthcheck-app
+          fi
+
+          echo "Creating application version."
+          aws elasticbeanstalk create-application-version \
+            --application-name healthcheck-app \
+            --version-label v1 \
+            --source-bundle S3Bucket=${{ env.AWS_ACCOUNT_ID }},S3Key=deploy.zip
+
+          ENVIRONMENT=$(aws elasticbeanstalk describe-environments --environment-names production --query 'Environments[*]' --output text)
+          if [ -z "$ENVIRONMENT" ]; then
+            echo "Environment does not exist. Creating environment with application version."
+            aws elasticbeanstalk create-environment \
+              --application-name healthcheck-app \
+              --version-label v1 \
+              --environment-name production \
+              --solution-stack-name "64bit Amazon Linux 2 v3.3.13 running Docker"
+          else
+            echo "Environment exists. Updating environment with application version."
+            aws elasticbeanstalk update-environment \
+              --application-name healthcheck-app \
+              --environment-name production \
+              --version-label v1
+          fi
+
   deploy:
     runs-on: ubuntu-latest
     steps:
@@ -54,31 +94,12 @@ jobs:
         run: zip -r deploy.zip Dockerrun.aws.json
 
       - name: Deploy to Elastic Beanstalk
-        run: |
-          APPLICATION=$(aws elasticbeanstalk describe-applications --application-names healthcheck-app --query 'Applications[*]' --output text)
-          if [ -z "$APPLICATION" ]; then
-            echo "Application does not exist. Creating application."
-            aws elasticbeanstalk create-application --application-name healthcheck-app
-          fi
-
-          echo "Creating application version."
-          aws elasticbeanstalk create-application-version \
-            --application-name healthcheck-app \
-            --version-label v1 \
-            --source-bundle S3Bucket=${{ env.AWS_ACCOUNT_ID }},S3Key=deploy.zip
-
-          ENVIRONMENT=$(aws elasticbeanstalk describe-environments --environment-names production --query 'Environments[*]' --output text)
-          if [ -z "$ENVIRONMENT" ]; then
-            echo "Environment does not exist. Creating environment with application version."
-            aws elasticbeanstalk create-environment \
-              --application-name healthcheck-app \
-              --version-label v1 \
-              --environment-name production \
-              --solution-stack-name "64bit Amazon Linux 2 v3.3.13 running Docker"
-          else
-            echo "Environment exists. Updating environment with application version."
-            aws elasticbeanstalk update-environment \
-              --application-name healthcheck-app \
-              --environment-name production \
-              --version-label v1
-          fi
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          region: ${{ env.AWS_REGION }}
+          application_name: healthcheck-app
+          environment_name: production
+          version_label: v1
+          deployment_package: deploy.zip
