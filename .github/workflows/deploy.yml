@@ -56,10 +56,10 @@ jobs:
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v22
         with:
-          access_key: ${{ env.AWS_ACCESS_KEY_ID }}
-          secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws_access_key: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           region: ${{ env.AWS_REGION }}
           application_name: healthcheck-app
           environment_name: production
           version_label: v1
-          zip_file: deploy.zip
+          deployment_package: deploy.zip
