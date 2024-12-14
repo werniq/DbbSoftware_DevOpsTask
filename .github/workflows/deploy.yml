@@ -55,7 +55,7 @@ jobs:
 
       - name: Create new EB Environment using AWS CLI
         run: |
-          aws elasticbeanstalk create-environment --application-name healthcheck-app --environment-name ${{ github.sha }} --solution-stack-name "64bit Amazon Linux 2023 v4.4.1 running Docker" --cname-prefix healthcheck-app --version-label ${{ github.sha }} --region ${{ env.AWS_REGION }}
+          aws elasticbeanstalk create-environment --application-name healthcheck-app --environment-name ${{ github.sha }} --solution-stack-name "64bit Amazon Linux 2023 v4.4.1 running Docker" --cname-prefix healthcheck-app --version-label v1 --region ${{ env.AWS_REGION }}
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
@@ -64,6 +64,5 @@ jobs:
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           application_name: healthcheck-app
           environment_name: ${{ github.sha }}
-          version_label: ${{ github.sha }}
           region: us-east-1
           deployment_package: deploy.zip
