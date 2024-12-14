@@ -7,7 +7,7 @@
         {
           Namespace:  "aws:autoscaling:launchconfiguration",
           OptionName: "DisableIMDSv1",
-          Value:      true,
+          Value:      "true",
         },
         {
           Namespace:  "aws:autoscaling:launchconfiguration",
