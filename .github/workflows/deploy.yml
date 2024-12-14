@@ -51,7 +51,7 @@ jobs:
           }' > Dockerrun.aws.json
 
       - name: Create deployment package
-        run: zip Dockerrun.aws.json deploy.zip
+        run: zip deploy.zip Dockerrun.aws.json
 
       - name: Create new EB Environment using AWS CLI
         run: |
