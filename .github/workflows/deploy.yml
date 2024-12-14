@@ -23,7 +23,7 @@ jobs:
           aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Build Docker image of our application
+      - name: Build Docker image of our application 1
         run: |
           docker build -t healthcheck-app:latest -f ./Dockerfile .
 
