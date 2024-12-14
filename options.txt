@@ -1,0 +1,17 @@
+[
+    {
+          Namespace:  "aws:autoscaling:launchconfiguration",
+          OptionName: "RootVolumeType",
+          Value:      "gp3",
+        },
+        {
+          Namespace:  "aws:autoscaling:launchconfiguration",
+          OptionName: "DisableIMDSv1",
+          Value:      true,
+        },
+        {
+          Namespace:  "aws:autoscaling:launchconfiguration",
+          OptionName: "IamInstanceProfile",
+          Value:      "arn:aws:iam::954976321177:instance-profile/ec2-beanstalk",
+    }
+]
