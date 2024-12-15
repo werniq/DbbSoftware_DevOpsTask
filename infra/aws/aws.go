@@ -107,7 +107,7 @@ func main() {
 
 	app := cdk.NewApp(nil)
 
-	NewAwsStack(app, "DBBSoftware_TestTaskAwsStack", &AwsStackProps{
+	NewAwsStack(app, "DBBSoftwareTestTaskAwsStack", &AwsStackProps{
 		cdk.StackProps{
 			Env: env(),
 		},
