@@ -13,3 +13,14 @@ Before running the code, You need to create an application and a role for the El
 I've tried to create this Role using CDK, but even with specifying same policies - I could not create environments with that role. 
 
 ## Results
+
+### Successful Deployment of the Python Health App to the AWS Elastic Beanstalk
+![img.png](images/aws_beanstalk_event_list.png)
+![img.png](images/aws_beanstalk_event_information.png)
+![img.png](images/aws_eb_python_health_report.png)
+
+### Successful Image Build and Push to ECR
+![img.png](images/docker_results.png)
+
+List of images in the ECR:
+![img.png](images/ecr_list.png)
