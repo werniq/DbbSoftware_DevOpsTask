@@ -36,6 +36,11 @@ cdk deploy
 ```
 
 2. To run the CI/CD pipeline, push the code to Github repository, and create any commit; the pipeline will be triggered automatically.
+Specify following secrets in the Github repository:
+- `AWS_ACCESS_KEY_ID` 
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_ACCOUNT_ID`
+
 3. To run the Python Health App locally, just run 
 ```python
 python -m venv venv
