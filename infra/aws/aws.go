@@ -51,7 +51,6 @@ func NewAwsStack(scope constructs.Construct, id string, props *AwsStackProps) cd
 	stack := cdk.NewStack(scope, &id, &sprops)
 
 	ecrRepo := ecr.NewRepository(stack, jsii.String("DBBSoftwareTestTaskECR"), &ecr.RepositoryProps{
-		EmptyOnDelete:   jsii.Bool(true),
 		ImageScanOnPush: jsii.Bool(true),
 		RepositoryName:  jsii.String(ecrRepositoryName),
 	})
