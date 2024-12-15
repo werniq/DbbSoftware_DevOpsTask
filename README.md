@@ -11,6 +11,7 @@ Before running the code, You need to create an application and a role for the El
 ![img.png](images/img.png)
 
 I've tried to create this Role using CDK, but even with specifying same policies - I could not create environments with that role. 
+Specify the role's ARN in the options.txt - all envrinments will be created using this role.
 
 ## Results
 
