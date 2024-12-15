@@ -81,8 +81,29 @@ func NewAwsStack(scope constructs.Construct, id string, props *AwsStackProps) cd
 
 	eksSecurityGroup.AddIngressRule(
 		ec2.Peer_AnyIpv4(),
-		ec2.Port_AllTraffic(),
-		jsii.String("Allow all inbound traffic"),
+		ec2.Port_HTTP(),
+		jsii.String("Allow all HTTP inbound traffic"),
+		jsii.Bool(false),
+	)
+
+	eksSecurityGroup.AddEgressRule(
+		ec2.Peer_AnyIpv4(),
+		ec2.Port_HTTP(),
+		jsii.String("Allow all HTTP inbound traffic"),
+		jsii.Bool(false),
+	)
+
+	eksSecurityGroup.AddIngressRule(
+		ec2.Peer_AnyIpv4(),
+		ec2.Port_HTTPS(),
+		jsii.String("Allow all HTTPs inbound traffic"),
+		jsii.Bool(false),
+	)
+
+	eksSecurityGroup.AddEgressRule(
+		ec2.Peer_AnyIpv4(),
+		ec2.Port_HTTPS(),
+		jsii.String("Allow all HTTPs inbound traffic"),
 		jsii.Bool(false),
 	)
 
