@@ -11,6 +11,7 @@ Before running the code, You need to create an application and a role for the El
 ![img.png](images/img.png)
 
 I've tried to create this Role using CDK, but even with specifying same policies - I could not create environments with that role. 
+Application name: healthcheck-app
 
 ## Results
 
@@ -24,3 +25,20 @@ I've tried to create this Role using CDK, but even with specifying same policies
 
 List of images in the ECR:
 ![img.png](images/ecr_list.png)
+
+## How to run the code
+
+1. Clone the repository
+In order to check CDK setup, navigate to `infra/aws`, and run (if CDK is not installed, install it first):
+```sh
+cdk deploy
+```
+
+2. To run the CI/CD pipeline, push the code to Github repository, and create any commit; the pipeline will be triggered automatically.
+3. To run the Python Health App locally, just run 
+```python
+python -m venv venv
+source venv/bin/activate (or venv\Scripts\activate on Windows)
+pip install -r requirements.txt
+python main.py
+```
