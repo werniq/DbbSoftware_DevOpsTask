@@ -58,7 +58,7 @@ jobs:
           aws elasticbeanstalk create-environment --application-name healthcheck-app --environment-name ${{ github.sha }} --solution-stack-name "64bit Amazon Linux 2023 v4.4.1 running Docker" --region ${{ env.AWS_REGION }} --option-settings file://options.txt
 
       - name: Sleep for 5 minutes to allow EB environment to be created
-        run: sleep 250
+        run: sleep 255
 
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v22
