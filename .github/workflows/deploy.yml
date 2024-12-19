@@ -1,0 +1,72 @@
+name: Deployment using AWS Elastic Beanstalk with CI/CD
+
+on:
+  push
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_ACCOUNT_ID: ${{ secrets.AWS_ACCOUNT_ID }}
+  AWS_REGION: us-east-1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Build Docker image of our application 1
+        run: |
+          docker build -t healthcheck-app:latest -f ./Dockerfile .
+
+      - name: Login to AWS ECR
+        run: aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com
+
+      - name: Push Docker image to AWS ECR
+        run: |
+          docker tag healthcheck-app:latest ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository
+          docker push ${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository
+
+      - name: Prepare Dockerrun.aws.json file
+        run: |
+          echo '{
+            "AWSEBDockerrunVersion": "1",
+            "Image": {
+              "Name": "${{ env.AWS_ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/dbbsoftware-test-task-ecr-repository:latest",
+              "Update": "true"
+            },
+            "Ports": [
+              {
+                "ContainerPort": "5000"
+              }
+            ]
+          }' > Dockerrun.aws.json
+
+      - name: Create deployment package
+        run: zip deploy.zip Dockerrun.aws.json
+
+      - name: Create new EB Environment using AWS CLI
+        run: |
+          aws elasticbeanstalk create-environment --application-name healthcheck-app --environment-name ${{ github.sha }} --solution-stack-name "64bit Amazon Linux 2023 v4.4.1 running Docker" --region ${{ env.AWS_REGION }} --option-settings file://options.txt
+
+      - name: Sleep for 5 minutes to allow EB environment to be created
+        run: sleep 255
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v22
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: healthcheck-app
+          environment_name: ${{ github.sha }}
+          version_label: 1.0.0-${{ github.sha }}
+          region: us-east-1
+          deployment_package: deploy.zip
