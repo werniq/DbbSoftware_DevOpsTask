@@ -1,4 +1,4 @@
-## DBB Software Test Task
+## AWS Beanstalk deployment action
 
 In this repository you can find three branches, each one for the part of the test task.
 1. **feature/python-health-app**: This branch contains the code for the Python Health App, with a Dockerfile to build the image
